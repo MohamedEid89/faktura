@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class FileHelper
@@ -38,7 +39,7 @@ class FileHelper
         // Validate each image
         foreach ($files as $file) {
             $file->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
 
             // Generate a random name for each image
@@ -64,7 +65,7 @@ class FileHelper
     {
         // Validate the request
         $file->validate([
-            'file' => 'required|mimes:pdf,doc,docx|max:2048',
+            'file' => 'required|mimes:pdf,doc,docx|max:5048',
         ]);
 
         // Generate a random name for the new file
@@ -80,6 +81,7 @@ class FileHelper
 
         // Upload the file to the public/files directory
         $file->move(public_path('files'), $fileName);
+        $file->move(Storage::disk('local')->put('/', $request->file('fileName') ));
 
         return $fileName;
     }

@@ -36,7 +36,7 @@ class AuthController extends Controller
 
         if($validator->fails())
         {
-            return ApiResponse::sendResponse($validator->errors(), 422 , 'Error Validation');
+            return ApiResponse::sendResponse('register', 'Error Validation' ,422 ,$validator->errors());
         }
             $user = User::create([
                 'name' => $request->name,
@@ -47,7 +47,7 @@ class AuthController extends Controller
             $data['name'] = $user->name;
             $data['email'] = $user->email;
             
-            return ApiResponse::sendResponse($data, 201 , __('auth.success'));
+            return ApiResponse::sendResponse('register', 'success' ,201, $data);
     }
 
     ################---------# {{ Login }} #---------################
@@ -70,7 +70,7 @@ class AuthController extends Controller
 
         if($validator->fails())
         {
-            return ApiResponse::sendResponse($validator->errors(), 422 , 'Error Validation');
+            return ApiResponse::sendResponse('login', 'Error Validation' ,422 ,$validator->errors());
         }
             
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password]))
@@ -79,10 +79,10 @@ class AuthController extends Controller
                     $data['taken'] = $user->createToken('UserToken')->plainTextToken;
                     $data['name'] = $user->name;
                     $data['email'] = $user->email;
-                    return ApiResponse::sendResponse($data, 200 , 'Registered Successfully');
+                    return ApiResponse::sendResponse('login', 'success' ,200 ,$data);
                 }
                 return ApiResponse::sendResponse([], 401 , __('auth.failed'));
-    }git init
+    }
 
     ################---------# {{ Logout }} #---------################
     // @desc User Logout
@@ -91,6 +91,6 @@ class AuthController extends Controller
     public function logout (Request $request) 
     {
         $request->user()->currentAccessToken()->delete();
-        return ApiResponse::sendResponse([], 200 , __('auth.logout'));
+        return ApiResponse::sendResponse('logout', 'sccesss', '200', __('auth.logout'));
     }
 }

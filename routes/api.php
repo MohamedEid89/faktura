@@ -29,7 +29,6 @@ Route::controller(AuthController::class)->group(function () {
 
 ###---------------------------- Profile MODULE
  Route::controller(ProfileController::class)->middleware('auth:sanctum')->group(function () {
-    Route::post('profiles/{id}', 'show');
-    Route::put('profiles/{id}', 'update');
-    
+    Route::get('profiles/{id}', 'show');
+    Route::post('profiles/{id}', 'update');
  });
